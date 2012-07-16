@@ -8,15 +8,19 @@ import json
 from urllib2 import HTTPError
 
 # This is the sole function that should be imported. It returns the EmailCenterPro object which will configure itself
-def ecp_connect(key, secret, url):
-    return EmailCenterPro(key, secret, url)
+def ecp_connect(key, secret, url, **kwargs):
+    return EmailCenterPro(key, secret, url, **kwargs)
 
 
 class EmailCenterPro(object):
-    def __init__(self, key, secret, url):
+    def __init__(self, key, secret, url, **kwargs):
         self._key = key
         self._secret = secret
         self._url = url
+
+        self._args = {}
+        for k, v in kwargs.items():
+            self._args[k] = v
 
         self.clear()
 
@@ -42,10 +46,16 @@ class EmailCenterPro(object):
         except HTTPError as e:
             self._data = urllib2.urlopen(e.filename).read()
 
-    def clear(self):
+    def clear(self, clear_args=None):
+        """
+        Clears last object, action and held return data.
+        With first parameter being not None it clears the set arguments as well.
+        """
+        if clear_args is not None:
+            self._args = {}
+
         self._object = None
         self._action = []
-        self._args = {}
         self._data = None
 
     def read(self):
