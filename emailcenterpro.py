@@ -56,6 +56,7 @@ class EmailCenterPro(object):
 def request_action(action_method):
     def wrapper(self, *args, **kwargs):
         return action_method(self, *args, **kwargs)._request(action_method.__name__.split('_'), **kwargs)
+
     return wrapper
 
 # This object is the base for all objects. Anything that applies to all objects lives here
@@ -69,17 +70,262 @@ class CoreEcpObject(object):
         self.connection.makeRequest(kwargs)
         return json.load(self.connection)
 
-# Some actions are simple very common and actions that need the the basics should use this
-class CommonEcpObject(CoreEcpObject):
+
+class account(CoreEcpObject):
+    @request_action
+    def account(self, **kwargs):
+        return self
+
+    @request_action
+    def update(self, **kwargs):
+        return self
+
+    @request_action
+    def cancel(self, **kwargs):
+        return self
+
+    @request_action
+    def stats(self, **kwargs):
+        return self
+
+    @request_action
+    def changeLevel(self, **kwargs):
+        return self
+
+
+class attachment(CoreEcpObject):
+    @request_action
+    def attachment(self, **kwargs):
+        return self
+
     @request_action
     def list(self, **kwargs):
         return self
 
-class folder(CommonEcpObject):
-    pass
+    @request_action
+    def download(self, **kwargs):
+        return self
+
+    @request_action
+    def preview(self, **kwargs):
+        return self
+
+    @request_action
+    def view(self, **kwargs):
+        return self
+
+
+class call(CoreEcpObject):
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def call(self, **kwargs):
+        return self
+
+
+class chat(CoreEcpObject):
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def chat(self, **kwargs):
+        return self
+
+
+class contact(CoreEcpObject):
+    @request_action
+    def contact(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def complete(self, **kwargs):
+        return self
+
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+    @request_action
+    def update(self, **kwargs):
+        return self
+
+
+class conversation(CoreEcpObject):
+    @request_action
+    def conversation(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def assign(self, **kwargs):
+        return self
+
+    @request_action
+    def move(self, **kwargs):
+        return self
+
+    @request_action
+    def mark(self, **kwargs):
+        return self
+
+    @request_action
+    def lock(self, **kwargs):
+        return self
+
+    @request_action
+    def unlock(self, **kwargs):
+        return self
+
+    @request_action
+    def star(self, **kwargs):
+        return self
+
+    @request_action
+    def unstar(self, **kwargs):
+        return self
+
+    @request_action
+    def ticket(self, **kwargs):
+        return self
+
+    @request_action
+    def message_respond(self, **kwargs):
+        return self
+
+    @request_action
+    def purge(self, **kwargs):
+        return self
+
+
+class folder(CoreEcpObject):
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+
+class history(CoreEcpObject):
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def renew(self, **kwargs):
+        return self
+
+
+class invoice(CoreEcpObject):
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+
+class key(CoreEcpObject):
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def issue(self, **kwargs):
+        return self
+
+    @request_action
+    def revoke(self, **kwargs):
+        return self
+
+
+class mailbox(CoreEcpObject):
+    @request_action
+    def mailbox(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def update(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+    @request_action
+    def verifyPop(self, **kwargs):
+        return self
+
+    @request_action
+    def findPopServer(self, **kwargs):
+        return self
+
+
+class message(CoreEcpObject):
+    @request_action
+    def message(self, **kwargs):
+        return self
+
+    @request_action
+    def send(self, **kwargs):
+        return self
+
+    @request_action
+    def save(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def breakThread(self, **kwargs):
+        return self
+
+    @request_action
+    def headers(self, **kwargs):
+        return self
+
+    @request_action
+    def quoted(self, **kwargs):
+        return self
+
+    @request_action
+    def discardDraft(self, **kwargs):
+        return self
+
+        # TODO Implement import action in a uniform manner
+
 
 class metrics(CoreEcpObject):
-
     @request_action
     def mailbox_traffic(self, **kwargs):
         return self
@@ -102,4 +348,210 @@ class metrics(CoreEcpObject):
 
     @request_action
     def usersonline(self, **kwargs):
+        return self
+
+
+class note(CoreEcpObject):
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+
+class partner(CoreEcpObject):
+    @request_action
+    def authenticate(self, **kwargs):
+        return self
+
+    @request_action
+    def revoke(self, **kwargs):
+        return self
+
+
+class popAccount(CoreEcpObject):
+    @request_action
+    def update(self, **kwargs):
+        return self
+
+    @request_action
+    def verify(self, **kwargs):
+        return self
+
+    @request_action
+    def findServer(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+
+class preference(CoreEcpObject):
+    @request_action
+    def get(self, **kwargs):
+        return self
+
+    @request_action
+    def set(self, **kwargs):
+        return self
+
+
+class search(CoreEcpObject):
+    @request_action
+    def search(self, **kwargs):
+        return self
+
+    @request_action
+    def get(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def save(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+
+class smtpServer(CoreEcpObject):
+    @request_action
+    def update(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def verify(self, **kwargs):
+        return self
+
+
+class tag(CoreEcpObject):
+    @request_action
+    def complete(self, **kwargs):
+        return self
+
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def set(self, **kwargs):
+        return self
+
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def rename(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+
+class template(CoreEcpObject):
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def update(self, **kwargs):
+        return self
+
+    @request_action
+    def send(self, **kwargs):
+        return self
+
+    @request_action
+    def template(self, **kwargs):
+        return self
+
+    @request_action
+    def render(self, **kwargs):
+        return self
+
+    @request_action
+    def inputFields(self, **kwargs):
+        return self
+
+    @request_action
+    def renderText(self, **kwargs):
+        return self
+
+
+class ticket(CoreEcpObject):
+    @request_action
+    def ticket(self, **kwargs):
+        return self
+
+
+class user(CoreEcpObject):
+    @request_action
+    def list(self, **kwargs):
+        return self
+
+    @request_action
+    def resetPassword(self, **kwargs):
+        return self
+
+    @request_action
+    def resetKey(self, **kwargs):
+        return self
+
+    @request_action
+    def delete(self, **kwargs):
+        return self
+
+    @request_action
+    def add(self, **kwargs):
+        return self
+
+    @request_action
+    def update(self, **kwargs):
+        return self
+
+    @request_action
+    def user(self, **kwargs):
+        return self
+
+
+class utility(CoreEcpObject):
+    @request_action
+    def test(self, **kwargs):
+        return self
+
+    @request_action
+    def context(self, **kwargs):
+        return self
+
+    @request_action
+    def refreshSession(self, **kwargs):
         return self
