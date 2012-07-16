@@ -21,6 +21,7 @@ class EmailCenterPro(object):
         self.clear()
 
         self.folder = folder(self)
+        self.metrics = metrics(self)
 
     def makeRequest(self, content):
         #TODO Make this use a list and support the nested actions
@@ -28,7 +29,7 @@ class EmailCenterPro(object):
         arguments = self._args
         arguments.update(content)
 
-        content = urlencode(content)
+        content = urlencode(arguments)
         date = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
         body = '\n'.join(['POST', api_action, content, date])
         headers = {'Authorization': 'ECP ' + self._key + ':' +
@@ -51,25 +52,13 @@ class EmailCenterPro(object):
         return self._data
 
 
-''' On methods where the end result is a reply from the API we enforce it with a decorator. '''
-
+# On methods where the end result is a reply from the API we enforce it with a decorator
 def request_action(action_method):
     def wrapper(self, *args, **kwargs):
         return action_method(self, *args, **kwargs)._request(action_method.__name__.split('_'), **kwargs)
-
     return wrapper
 
-''' Any method that does not result in a request is for configuring arguments and returns the object object '''
-
-def argument_action(action_method):
-    def wrapper(self, *args, **kwargs):
-        action_method(self, *args, **kwargs)
-        return self
-
-    return wrapper
-
-''' This object is the base for all objects. Anything that applies to all objects lives here '''
-
+# This object is the base for all objects. Anything that applies to all objects lives here
 class CoreEcpObject(object):
     def __init__(self, connection):
         self.connection = connection
@@ -80,22 +69,37 @@ class CoreEcpObject(object):
         self.connection.makeRequest(kwargs)
         return json.load(self.connection)
 
-    ''' Mailbox GUID to limit to a single mailbox. '''
-
-    @argument_action
-    def mailboxId(self, mailboxId):
-        self.connection._args['mailboxId'] = mailboxId
-
-''' Some actions are simple very common and actions that need the the basics should use this '''
-
+# Some actions are simple very common and actions that need the the basics should use this
 class CommonEcpObject(CoreEcpObject):
     @request_action
     def list(self, **kwargs):
         return self
 
-
 class folder(CommonEcpObject):
     pass
 
 class metrics(CoreEcpObject):
-    pass
+
+    @request_action
+    def mailbox_traffic(self, **kwargs):
+        return self
+
+    @request_action
+    def mailbox_responsetime(self, **kwargs):
+        return self
+
+    @request_action
+    def mailbox_breakdown(self, **kwargs):
+        return self
+
+    @request_action
+    def mailbox_trafficdistribution(self, **kwargs):
+        return self
+
+    @request_action
+    def mailbox_useractivity(self, **kwargs):
+        return self
+
+    @request_action
+    def usersonline(self, **kwargs):
+        return self
