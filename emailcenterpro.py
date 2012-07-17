@@ -18,6 +18,8 @@ class EmailCenterPro(object):
         self._secret = secret
         self._url = url
 
+        self._request_method = 'POST'
+
         self._args = {}
         for k, v in kwargs.items():
             self._args[k] = v
@@ -62,7 +64,7 @@ class EmailCenterPro(object):
         action_url = self._url + api_action
 
         try:
-            if len(arguments) > 0:
+            if self._request_method == 'POST':
                 request = urllib2.Request(action_url, content, headers=headers)
                 response = urllib2.urlopen(request)
                 self._data = response.read()
@@ -72,6 +74,8 @@ class EmailCenterPro(object):
                 self._data = urllib2.urlopen(request).read()
         except HTTPError as e:
             self._data = '{"http_error": "%s" }' % (e.code)
+
+        self._request_method = 'POST'
 
     def clear(self, clear_args=None):
         """
@@ -90,10 +94,15 @@ class EmailCenterPro(object):
 
 
 # On methods where the end result is a reply from the API we enforce it with a decorator
-def request_action(action_method):
-    def wrapper(self, **kwargs):
-        return self._request(action_method.__name__.split('_'), **kwargs)
-    return wrapper
+def request_action(method='POST'):
+    def decorator(action_method):
+        def wrapper(self, **kwargs):
+            self.connection._request_method = method
+            return self._request(action_method.__name__.split('_'), **kwargs)
+        return wrapper
+    return decorator
+
+
 
 
 # This object is the base for all objects. Anything that applies to all objects lives here
@@ -118,7 +127,7 @@ class account(CoreEcpObject):
     @request_action
     def cancel(self, **kwargs): pass
 
-    @request_action
+    @request_action('GET')
     def stats(self, **kwargs): pass
 
     @request_action
