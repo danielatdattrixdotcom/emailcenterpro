@@ -13,8 +13,8 @@ def ecp_connect(key, secret, url, **kwargs):
 
 
 class EmailCenterPro(object):
-    def __init__(self, key, secret, url, **kwargs):
-        self._key = key
+    def __init__(self, auth_key, secret, url, **kwargs):
+        self._key = auth_key
         self._secret = secret
         self._url = url
 
@@ -24,12 +24,32 @@ class EmailCenterPro(object):
 
         self.clear()
 
+        self.account = account(self)
+        self.attachment = attachment(self)
+        self.call = call(self)
+        self.chat = chat(self)
+        self.contact = contact(self)
+        self.conversation = conversation(self)
         self.folder = folder(self)
-        self.metrics = metrics(self)
+        self.history = history(self)
+        self.invoice = invoice(self)
+        self.key = key(self)
+        self.mailbox = mailbox(self)
         self.message = message(self)
+        self.metrics = metrics(self)
+        self.note = note(self)
+        self.partner = partner(self)
+        self.popAccount = popAccount(self)
+        self.preference = preference(self)
+        self.search = search(self)
+        self.smtpServer = smtpServer(self)
+        self.tag = tag(self)
+        self.template = template(self)
+        self.ticket = ticket(self)
+        self.user = user(self)
+        self.utility = utility(self)
 
     def makeRequest(self, content):
-        #TODO Make this use a list and support the nested actions
         api_action = '/%s/%s' % (self._object, '/'.join(self._action))
         arguments = self._args
         arguments.update(content)
@@ -40,12 +60,18 @@ class EmailCenterPro(object):
         headers = {'Authorization': 'ECP ' + self._key + ':' +
                                     binascii.b2a_base64(hmac.new(self._secret, body, sha1).digest())[:-1], 'Date': date}
         action_url = self._url + api_action
-        request = urllib2.Request(action_url, content, headers=headers)
+
         try:
-            response = urllib2.urlopen(request)
-            self._data = response.read()
+            if len(arguments) > 0:
+                request = urllib2.Request(action_url, content, headers=headers)
+                response = urllib2.urlopen(request)
+                self._data = response.read()
+            else:
+                request = urllib2.Request('%s?%s' % (action_url, content))
+                request.add_header('Authorization', headers['Authorization'])
+                self._data = urllib2.urlopen(request).read()
         except HTTPError as e:
-            self._data = urllib2.urlopen(e.filename).read()
+            self._data = '{"http_error": "%s" }' % (e.code)
 
     def clear(self, clear_args=None):
         """
@@ -74,9 +100,9 @@ def request_action(action_method):
 class CoreEcpObject(object):
     def __init__(self, connection):
         self.connection = connection
-        self.connection._object = self.__class__.__name__
 
     def _request(self, action, **kwargs):
+        self.connection._object = self.__class__.__name__
         self.connection._action = action
         self.connection.makeRequest(kwargs)
         return json.load(self.connection)
