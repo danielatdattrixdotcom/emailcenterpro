@@ -10,7 +10,21 @@ Example
 from emailcenterpro import ecp_connect
 
 ecp = ecp_connect('YOUR_KEY', 'YOUR_SECRET', 'YOUR_URL')
+
+# Actions are simple and follow the API URL path
 print ecp.folder.list()
+
+# Passing in parameters, all done via keyword params
+print ecp.conversation.list(mailboxId='MAILBOX_GUID')
+
+# You can pass keyword args to ecp_connect if you always want certain parameters passed, e.g. mailboxId
+ecp = ecp_connect('YOUR_KEY', 'YOUR_SECRET', 'YOUR_URL', mailboxId='MAILBOX_GUID')
 ```
 
 
+About Email Center Pro
+==============
+
+I'm in no way affiliated with Palo Alto Software, so I'll let them handle the sales pitch for ECP.
+
+http://www.emailcenterpro.com/
