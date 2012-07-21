@@ -208,7 +208,7 @@ class conversation(CoreEcpObject):
     def conversation(self, **kwargs): pass
 
     @post_request
-    def list(self, **kwargs): print 'fffff'
+    def list(self, **kwargs): pass
 
     @post_request
     def assign(self, **kwargs): pass
