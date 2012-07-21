@@ -121,12 +121,17 @@ def post_request(action_method):
 class CoreEcpObject(object):
     def __init__(self, connection):
         self.connection = connection
+        self.data = {}
+
+    def __repr__(self):
+        return self.data
 
     def _request(self, action, **kwargs):
         self.connection._object = self.__class__.__name__
         self.connection._action = action
         self.connection.makeRequest(kwargs)
-        return json.load(self.connection)
+        self.data = json.load(self.connection)
+        return self.data
 
 class account(CoreEcpObject):
     @post_request
