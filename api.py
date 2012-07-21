@@ -60,7 +60,11 @@ class EmailCenterPro(object):
         arguments.update(content)
         content = urlencode(arguments)
 
-        api_action = '/%s/%s' % (self._object, '/'.join(self._action))
+        self._action = filter(None,self._action)
+        if self._action[-1] != 'call':
+            api_action = '/%s/%s' % (self._object, '/'.join(self._action))
+        else:
+            api_action = '/%s' % (self._object,)
 
         def create_auth_headers(self):
             date = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
@@ -126,7 +130,7 @@ class CoreEcpObject(object):
 
 class account(CoreEcpObject):
     @post_request
-    def account(self, **kwargs): pass
+    def __call__(self, *args, **kwargs): pass
 
     @post_request
     def update(self, **kwargs): pass
