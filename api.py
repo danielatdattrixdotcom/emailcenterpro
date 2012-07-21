@@ -61,6 +61,7 @@ class EmailCenterPro(object):
         arguments.update(content)
         content = urlencode(arguments)
 
+        # We use filter here due to the __call__ method being a potential source of a request
         self._action = filter(None,self._action)
         if self._action[-1] != 'call':
             api_action = '/%s/%s' % (self._object, '/'.join(self._action))
