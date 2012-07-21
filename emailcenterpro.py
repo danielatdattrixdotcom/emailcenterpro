@@ -61,19 +61,25 @@ class EmailCenterPro(object):
         content = urlencode(arguments)
 
         api_action = '/%s/%s' % (self._object, '/'.join(self._action))
-        date = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
-        body = '\n'.join(['POST', api_action, content, date])
-        headers = {'Authorization': 'ECP ' + self._key + ':' +
-                                    binascii.b2a_base64(hmac.new(self._secret, body, sha1).digest())[:-1], 'Date': date}
+
+        def create_auth_headers(self):
+            date = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
+            body = '\n'.join([self._request_method, api_action, content, date])
+            headers = {'Authorization': 'ECP ' + self._key + ':' +
+                                        binascii.b2a_base64(hmac.new(self._secret, body, sha1).digest())[:-1], 'Date': date}
+            return headers
+
         action_url = self._url + api_action
         try:
             if self._request_method == 'POST':
-                request = urllib2.Request(action_url, content, headers=headers)
+                request = urllib2.Request(action_url, content, headers=create_auth_headers(self))
                 response = urllib2.urlopen(request)
                 self._data = response.read()
             else:
                 request = urllib2.Request('%s?%s' % (action_url, content))
+                headers = create_auth_headers(self)
                 request.add_header('Authorization', headers['Authorization'])
+                request.add_header('Date', headers['Date'])
                 self._data = urllib2.urlopen(request).read()
         except HTTPError as e:
             self._data = '{"http_error": "%s" }' % (e.code)
