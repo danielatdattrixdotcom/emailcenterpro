@@ -135,7 +135,7 @@ class CoreEcpObject(object):
 
     def next(self):
         try:
-            for item in self.data['%ss' % (self.__class__.__name__)]:
+            for item in self.data[self._iterator_key]:
                 yield self._type(item)
         except KeyError:
             yield self._type(self.data)
@@ -150,6 +150,7 @@ class CoreEcpObject(object):
 class account(CoreEcpObject):
 
     _type = types.Account
+    _iterator_key = 'accounts'
 
     @post_request
     def update(self, **kwargs): pass
@@ -167,6 +168,7 @@ class account(CoreEcpObject):
 class attachment(CoreEcpObject):
 
     _type = types.Attachment
+    _iterator_key = 'attachments'
 
     @post_request
     def list(self, **kwargs): pass
@@ -182,6 +184,10 @@ class attachment(CoreEcpObject):
 
 
 class call(CoreEcpObject):
+
+    _type = types.CallNote
+    _iterator_key = 'calls'
+
     @post_request
     def add(self, **kwargs): pass
 
@@ -192,6 +198,10 @@ class call(CoreEcpObject):
     def list(self, **kwargs): pass
 
 class chat(CoreEcpObject):
+
+    _type = types.ChatNote
+    _iterator_key = 'chats'
+
     @get_request
     def add(self, **kwargs): pass
 
@@ -199,6 +209,10 @@ class chat(CoreEcpObject):
     def list(self, **kwargs): pass
 
 class contact(CoreEcpObject):
+
+    _type = types.Contact
+    _iterator_key = 'contact'
+
     @get_request
     def list(self, **kwargs): pass
 
