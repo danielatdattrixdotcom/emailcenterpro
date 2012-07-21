@@ -7,12 +7,15 @@ ECP ( as it shall be known henceforth ) is a team-centric email service provided
 Example
 ==============
 ```python
-from emailcenterpro import ecp_connect
+from emailcenterpro.api import ecp_connect
 
 ecp = ecp_connect('YOUR_KEY', 'YOUR_SECRET', 'YOUR_URL')
 
 # Actions are simple and follow the API URL path
-print ecp.folder.list()
+print ecp.account.stats()
+
+# Objects return data without an action are also implemented
+print ecp.account()
 
 # Passing in parameters, all done via keyword params
 print ecp.conversation.list(mailboxId='MAILBOX_GUID')
