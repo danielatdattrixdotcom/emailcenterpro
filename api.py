@@ -6,6 +6,7 @@ from urllib import urlencode
 import urllib2
 import json
 from urllib2 import HTTPError
+import types
 
 # This is the sole function that should be imported. It returns the EmailCenterPro object which will configure itself
 def ecp_connect(key, secret, url, **kwargs):
@@ -127,16 +128,29 @@ class CoreEcpObject(object):
     def __call__(self, *args, **kwargs): pass
 
     def __repr__(self):
-        return self.data
+        return str(self.data)
+
+    def __iter__(self):
+        return self.next()
+
+    def next(self):
+        try:
+            for item in self.data['%ss' % (self.__class__.__name__)]:
+                yield self._type(item)
+        except KeyError:
+            yield self._type(self.data)
 
     def _request(self, action, **kwargs):
         self.connection._object = self.__class__.__name__
         self.connection._action = action
         self.connection.makeRequest(kwargs)
         self.data = json.load(self.connection)
-        return self.data
+        return self
 
 class account(CoreEcpObject):
+
+    _type = types.Account
+
     @post_request
     def update(self, **kwargs): pass
 
@@ -151,6 +165,9 @@ class account(CoreEcpObject):
 
 
 class attachment(CoreEcpObject):
+
+    _type = types.Attachment
+
     @post_request
     def list(self, **kwargs): pass
 
