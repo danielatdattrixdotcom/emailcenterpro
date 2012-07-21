@@ -11,21 +11,23 @@ from urllib2 import HTTPError
 def ecp_connect(key, secret, url, **kwargs):
     return EmailCenterPro(key, secret, url, **kwargs)
 
-
 class EmailCenterPro(object):
     def __init__(self, auth_key, secret, url, **kwargs):
         self._key = auth_key
         self._secret = secret
         self._url = url
 
+        # Default request type is POST
         self._request_method = 'POST'
 
+        # Setup optional persistent arguments
         self._args = {}
         for k, v in kwargs.items():
             self._args[k] = v
 
         self.clear()
 
+        # All the objects get initialized
         self.account = account(self)
         self.attachment = attachment(self)
         self.call = call(self)
@@ -52,17 +54,18 @@ class EmailCenterPro(object):
         self.utility = utility(self)
 
     def makeRequest(self, content):
-        api_action = '/%s/%s' % (self._object, '/'.join(self._action))
+        # Combine persistent arguments with those passed in.
+        # Passed arguments can override persistent ones
         arguments = self._args
         arguments.update(content)
-
         content = urlencode(arguments)
+
+        api_action = '/%s/%s' % (self._object, '/'.join(self._action))
         date = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
         body = '\n'.join(['POST', api_action, content, date])
         headers = {'Authorization': 'ECP ' + self._key + ':' +
                                     binascii.b2a_base64(hmac.new(self._secret, body, sha1).digest())[:-1], 'Date': date}
         action_url = self._url + api_action
-
         try:
             if self._request_method == 'POST':
                 request = urllib2.Request(action_url, content, headers=headers)
@@ -76,9 +79,8 @@ class EmailCenterPro(object):
             self._data = '{"http_error": "%s" }' % (e.code)
 
     def clear(self, clear_args=None):
-        """
-        Clears last object, action and held return data.
-        With first parameter being not None it clears the set arguments as well.
+        """ Clears last object, action and held return data.
+            With first parameter being not None it clears the set arguments as well.
         """
         if clear_args is not None:
             self._args = {}
@@ -88,8 +90,9 @@ class EmailCenterPro(object):
         self._data = None
 
     def read(self):
+        """ For compatibility with JSON decoding
+        """
         return self._data
-
 
 # On methods where the end result is a reply from the API we enforce it with a decorator
 def request_action(method='POST'):
@@ -99,9 +102,6 @@ def request_action(method='POST'):
             return self._request(action_method.__name__.split('_'), **kwargs)
         return wrapper
     return decorator
-
-
-
 
 # This object is the base for all objects. Anything that applies to all objects lives here
 class CoreEcpObject(object):
@@ -113,7 +113,6 @@ class CoreEcpObject(object):
         self.connection._action = action
         self.connection.makeRequest(kwargs)
         return json.load(self.connection)
-
 
 class account(CoreEcpObject):
     @request_action
