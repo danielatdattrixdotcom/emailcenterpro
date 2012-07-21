@@ -184,13 +184,13 @@ class chat(CoreEcpObject):
 
 
 class contact(CoreEcpObject):
-    @post_request
+    @get_request
     def contact(self, **kwargs): pass
 
-    @post_request
+    @get_request
     def list(self, **kwargs): pass
 
-    @post_request
+    @get_request
     def complete(self, **kwargs): pass
 
     @post_request
@@ -260,7 +260,7 @@ class invoice(CoreEcpObject):
 
 
 class key(CoreEcpObject):
-    @post_request
+    @get_request
     def list(self, **kwargs): pass
 
     @post_request
@@ -491,11 +491,11 @@ class user(CoreEcpObject):
 
 
 class utility(CoreEcpObject):
-    @post_request
+    @get_request
     def test(self, **kwargs): pass
 
-    @post_request
+    @get_request
     def context(self, **kwargs): pass
 
-    @post_request
+    @get_request
     def refreshSession(self, **kwargs): pass
