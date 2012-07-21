@@ -75,8 +75,6 @@ class EmailCenterPro(object):
         except HTTPError as e:
             self._data = '{"http_error": "%s" }' % (e.code)
 
-        self._request_method = 'POST'
-
     def clear(self, clear_args=None):
         """
         Clears last object, action and held return data.
