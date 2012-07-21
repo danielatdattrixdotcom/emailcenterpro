@@ -123,6 +123,9 @@ class CoreEcpObject(object):
         self.connection = connection
         self.data = {}
 
+    @post_request
+    def __call__(self, *args, **kwargs): pass
+
     def __repr__(self):
         return self.data
 
@@ -134,9 +137,6 @@ class CoreEcpObject(object):
         return self.data
 
 class account(CoreEcpObject):
-    @post_request
-    def __call__(self, *args, **kwargs): pass
-
     @post_request
     def update(self, **kwargs): pass
 
@@ -151,9 +151,6 @@ class account(CoreEcpObject):
 
 
 class attachment(CoreEcpObject):
-    @post_request
-    def attachment(self, **kwargs): pass
-
     @post_request
     def list(self, **kwargs): pass
 
@@ -177,10 +174,6 @@ class call(CoreEcpObject):
     @post_request
     def list(self, **kwargs): pass
 
-    @post_request
-    def call(self, **kwargs): pass
-
-
 class chat(CoreEcpObject):
     @get_request
     def add(self, **kwargs): pass
@@ -188,14 +181,7 @@ class chat(CoreEcpObject):
     @post_request
     def list(self, **kwargs): pass
 
-    @post_request
-    def chat(self, **kwargs): pass
-
-
 class contact(CoreEcpObject):
-    @get_request
-    def contact(self, **kwargs): pass
-
     @get_request
     def list(self, **kwargs): pass
 
@@ -213,9 +199,6 @@ class contact(CoreEcpObject):
 
 
 class conversation(CoreEcpObject):
-    @post_request
-    def conversation(self, **kwargs): pass
-
     @post_request
     def list(self, **kwargs): pass
 
@@ -281,9 +264,6 @@ class key(CoreEcpObject):
 
 class mailbox(CoreEcpObject):
     @post_request
-    def mailbox(self, **kwargs): pass
-
-    @post_request
     def list(self, **kwargs): pass
 
     @post_request
@@ -303,9 +283,6 @@ class mailbox(CoreEcpObject):
 
 
 class message(CoreEcpObject):
-    @post_request
-    def message(self, **kwargs): pass
-
     @post_request
     def send(self, **kwargs): pass
 
@@ -459,9 +436,6 @@ class template(CoreEcpObject):
     def send(self, **kwargs): pass
 
     @post_request
-    def template(self, **kwargs): pass
-
-    @post_request
     def render(self, **kwargs): pass
 
     @post_request
@@ -472,9 +446,7 @@ class template(CoreEcpObject):
 
 
 class ticket(CoreEcpObject):
-    @post_request
-    def ticket(self, **kwargs): pass
-
+    pass
 
 class user(CoreEcpObject):
     @post_request
@@ -494,10 +466,6 @@ class user(CoreEcpObject):
 
     @post_request
     def update(self, **kwargs): pass
-
-    @post_request
-    def user(self, **kwargs): pass
-
 
 class utility(CoreEcpObject):
     @get_request
