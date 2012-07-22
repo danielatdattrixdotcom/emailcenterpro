@@ -6,18 +6,21 @@ def get_request(action_method):
     def wrapper(action_object, **kwargs):
         action_object.connection._request_method = 'GET'
         return action_object._request(action_method.__name__.split('_'), **kwargs)
+
     return wrapper
+
 
 def post_request(action_method):
     def wrapper(action_object, **kwargs):
         action_object.connection._request_method = 'POST'
         return action_object._request(action_method.__name__.split('_'), **kwargs)
+
     return wrapper
 
 # This object is the base for all objects. Anything that applies to all objects lives here
 class CoreEcpObject(object):
-
     _type = types.Type
+    _iterator_key = None
 
     def __init__(self, connection):
         self.connection = connection
@@ -46,8 +49,8 @@ class CoreEcpObject(object):
         self.data = json.load(self.connection)
         return self
 
-class account(CoreEcpObject):
 
+class account(CoreEcpObject):
     _type = types.Account
     _iterator_key = 'accounts'
 
@@ -65,7 +68,6 @@ class account(CoreEcpObject):
 
 
 class attachment(CoreEcpObject):
-
     _type = types.Attachment
     _iterator_key = 'attachments'
 
@@ -83,7 +85,6 @@ class attachment(CoreEcpObject):
 
 
 class call(CoreEcpObject):
-
     _type = types.CallNote
     _iterator_key = 'calls'
 
@@ -96,8 +97,8 @@ class call(CoreEcpObject):
     @post_request
     def list(self, **kwargs): pass
 
-class chat(CoreEcpObject):
 
+class chat(CoreEcpObject):
     _type = types.ChatNote
     _iterator_key = 'chats'
 
@@ -107,8 +108,8 @@ class chat(CoreEcpObject):
     @post_request
     def list(self, **kwargs): pass
 
-class contact(CoreEcpObject):
 
+class contact(CoreEcpObject):
     _type = types.Contact
     _iterator_key = 'contact'
 
@@ -129,7 +130,6 @@ class contact(CoreEcpObject):
 
 
 class conversation(CoreEcpObject):
-
     _type = types.Conversation
     _iterator_key = 'conversation'
 
@@ -168,7 +168,6 @@ class conversation(CoreEcpObject):
 
 
 class folder(CoreEcpObject):
-
     _iterator_key = 'folders'
 
     @post_request
@@ -176,7 +175,6 @@ class folder(CoreEcpObject):
 
 
 class history(CoreEcpObject):
-
     _type = types.History
     _iterator_key = 'history'
 
@@ -188,7 +186,6 @@ class history(CoreEcpObject):
 
 
 class invoice(CoreEcpObject):
-
     _iterator_key = 'invoices'
 
     @post_request
@@ -199,6 +196,7 @@ class key(CoreEcpObject):
     """
         Useless until Session-based auth is implemented
     """
+
     @get_request
     def list(self, **kwargs): pass
 
@@ -210,7 +208,6 @@ class key(CoreEcpObject):
 
 
 class mailbox(CoreEcpObject):
-
     _type = types.Mailbox
     _iterator_key = 'mailboxes'
 
@@ -234,7 +231,6 @@ class mailbox(CoreEcpObject):
 
 
 class message(CoreEcpObject):
-
     _type = types.Message
     _iterator_key = 'messages'
 
@@ -263,7 +259,6 @@ class message(CoreEcpObject):
 
 
 class metrics(CoreEcpObject):
-
     _iterator_key = 'datasets'
 
     @post_request
@@ -286,7 +281,6 @@ class metrics(CoreEcpObject):
 
 
 class note(CoreEcpObject):
-
     _type = types.Note
     _iterator_key = 'note'
 
@@ -309,7 +303,6 @@ class partner(CoreEcpObject):
 
 
 class popAccount(CoreEcpObject):
-
     _type = types.PopAccount
     _iterator_key = 'popAccount'
 
@@ -327,7 +320,6 @@ class popAccount(CoreEcpObject):
 
 
 class preference(CoreEcpObject):
-
     @post_request
     def get(self, **kwargs): pass
 
@@ -336,7 +328,6 @@ class preference(CoreEcpObject):
 
 
 class search(CoreEcpObject):
-
     _iterator_key = 'folders'
 
     @post_request
@@ -356,7 +347,6 @@ class search(CoreEcpObject):
 
 
 class smtpServer(CoreEcpObject):
-
     _type = types.SmtpServer
     _iterator_key = 'smtpServer'
 
@@ -374,7 +364,6 @@ class smtpServer(CoreEcpObject):
 
 
 class tag(CoreEcpObject):
-
     _iterator_key = 'tag'
 
     @post_request
@@ -397,7 +386,6 @@ class tag(CoreEcpObject):
 
 
 class template(CoreEcpObject):
-
     _type = types.Template
     _iterator_key = 'templates'
 
@@ -429,8 +417,8 @@ class template(CoreEcpObject):
 class ticket(CoreEcpObject):
     pass
 
-class user(CoreEcpObject):
 
+class user(CoreEcpObject):
     _type = types.User
     _iterator_key = 'users'
 
@@ -451,6 +439,7 @@ class user(CoreEcpObject):
 
     @post_request
     def update(self, **kwargs): pass
+
 
 class utility(CoreEcpObject):
     @get_request

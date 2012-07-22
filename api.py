@@ -11,6 +11,7 @@ import objects
 def ecp_connect(key, secret, url, **kwargs):
     return EmailCenterPro(key, secret, url, **kwargs)
 
+
 class EmailCenterPro(object):
     def __init__(self, auth_key, secret, url, **kwargs):
         self._key = auth_key
@@ -61,7 +62,7 @@ class EmailCenterPro(object):
         content = urlencode(arguments)
 
         # We use filter here due to the __call__ method being a potential source of a request
-        self._action = filter(None,self._action)
+        self._action = filter(None, self._action)
         if self._action[-1] != 'call':
             api_action = '/%s/%s' % (self._object, '/'.join(self._action))
         else:
@@ -71,7 +72,8 @@ class EmailCenterPro(object):
             date = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
             body = '\n'.join([self._request_method, api_action, content, date])
             headers = {'Authorization': 'ECP ' + self._key + ':' +
-                                        binascii.b2a_base64(hmac.new(self._secret, body, sha1).digest())[:-1], 'Date': date}
+                                        binascii.b2a_base64(hmac.new(self._secret, body, sha1).digest())[:-1],
+                       'Date': date}
             return headers
 
         action_url = self._url + api_action
