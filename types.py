@@ -88,6 +88,12 @@ class Type(object):
             self.__dict__.update(args[0])
         self.__dict__.update(kwargs)
 
+    def __getitem__(self, item):
+        return self.__dict__[item]
+
+    def __str__(self):
+        return str(self.__dict__)
+
 
 class Account(Type):
     def __init__(self, *args, **kwargs):

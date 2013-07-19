@@ -29,8 +29,11 @@ class CoreEcpObject(object):
     @post_request
     def __call__(self, *args, **kwargs): pass
 
-    def __repr__(self):
+    def ___str__(self):
         return str(self.data)
+
+    def __getitem__(self, item):
+        return self.data[self._iterator_key][item]
 
     def __iter__(self):
         return self.next()
@@ -41,6 +44,9 @@ class CoreEcpObject(object):
                 yield self._type(item)
         except (AttributeError, KeyError):
             raise StopIteration
+
+    def __len__(self):
+        return self.data['count']
 
     def _request(self, action, **kwargs):
         self.connection._object = self.__class__.__name__
